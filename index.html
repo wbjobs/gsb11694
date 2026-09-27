@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图像金字塔 · 多分辨率渲染</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <h1>图像金字塔 · 高斯/拉普拉斯多分辨率渲染</h1>
+  <div class="controls">
+    <button data-gen="2048">生成 2048²</button>
+    <button data-gen="4096">生成 4096²</button>
+    <button data-gen="8192">生成 8192²</button>
+    <label class="file-label">加载图片<input type="file" id="fileInput" accept="image/*"></label>
+    <button id="clearBtn">清空缓存</button>
+    <button id="fitBtn">适配视图</button>
+    <button id="benchBtn">运行基准测试</button>
+  </div>
+  <div class="controls">
+    <label>渲染模式
+      <select id="modeSelect">
+        <option value="pyramid">金字塔（多分辨率）</option>
+        <option value="single">单分辨率（降级）</option>
+      </select>
+    </label>
+    <label>金字塔视图
+      <select id="viewModeSelect">
+        <option value="g">高斯层</option>
+        <option value="l">拉普拉斯层</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="gridCheck"> 显示瓦片边界</label>
+    <label>缓存预算 <input type="range" id="budgetRange" min="32" max="512" value="256" step="32"> <span id="budgetLabel">256 MB</span></label>
+  </div>
+  <div class="build-status">
+    <progress id="progress" value="0" max="100"></progress>
+    <span id="progressText">空闲</span>
+  </div>
+</header>
+
+<main>
+  <div class="canvas-wrap">
+    <canvas id="view"></canvas>
+    <div class="hint">滚轮缩放 · 拖拽平移 · 双击放大 · 双指捏合</div>
+  </div>
+
+  <aside>
+    <section class="panel">
+      <h2>实时性能</h2>
+      <dl class="stats">
+        <dt>FPS</dt><dd id="statFps">-</dd>
+        <dt>帧耗时 (ms)</dt><dd id="statFrame">-</dd>
+        <dt>当前层级</dt><dd id="statLevel">-</dd>
+        <dt>绘制瓦片</dt><dd id="statTiles">-</dd>
+        <dt>缓存 (MB)</dt><dd id="statCache">-</dd>
+        <dt>缓存命中率</dt><dd id="statHit">-</dd>
+        <dt>JS 堆 (MB)</dt><dd id="statHeap">-</dd>
+        <dt>长任务数</dt><dd id="statLongtask">-</dd>
+      </dl>
+    </section>
+    <section class="panel">
+      <h2>金字塔层级</h2>
+      <div id="levelInfo" class="mono">未构建</div>
+    </section>
+    <section class="panel">
+      <h2>基准测试结果</h2>
+      <table id="benchTable" class="mono"><tr><td colspan="6">点击「运行基准测试」</td></tr></table>
+    </section>
+    <section class="panel">
+      <h2>日志</h2>
+      <div id="log" class="mono"></div>
+    </section>
+  </aside>
+</main>
+
+<script src="js/db.js"></script>
+<script src="js/tile-cache.js"></script>
+<script src="js/perf.js"></script>
+<script src="js/viewer.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
